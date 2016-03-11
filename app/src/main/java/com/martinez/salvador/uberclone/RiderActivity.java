@@ -72,7 +72,10 @@ public class RiderActivity extends FragmentActivity implements OnMapReadyCallbac
     protected void onResume() {
         super.onResume();
         if (mGoogleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            try {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            }
+            catch (SecurityException e) {e.printStackTrace();}
         }
     }
 
@@ -104,12 +107,13 @@ public class RiderActivity extends FragmentActivity implements OnMapReadyCallbac
         else {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mLastLocation != null) {
+                removeOldMarker();
                 LatLng sydney = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(sydney).title("You are Here"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, (float) (mMap.getMaxZoomLevel() / 2.0)));
+                marker = mMap.addMarker(new MarkerOptions().position(sydney).title("You are Here"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, (float) (mMap.getMinZoomLevel() /*/ 2.0*/)));
+                Log.i("initial place", "Got location" + mLastLocation.toString());
             }
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            Log.i("initial place", "Got location" + mLastLocation.toString());
         }
     }
 
@@ -118,12 +122,13 @@ public class RiderActivity extends FragmentActivity implements OnMapReadyCallbac
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         try {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            Log.i("initial place", "Got location" + mLastLocation.toString());
             // Add a marker in Sydney and move the camera
             if (mLastLocation != null) {
+                removeOldMarker();
+                Log.i("initial place", "Got location" + mLastLocation.toString());
                 LatLng sydney = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                 marker = mMap.addMarker(new MarkerOptions().position(sydney).title("You are Here"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, (float) (mMap.getMaxZoomLevel() / 2.0)));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, (float) (mMap.getMinZoomLevel() /*/ 2.0*/)));
             }
         }
         catch (SecurityException e) {
@@ -148,11 +153,15 @@ public class RiderActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void updateUI() {
+        removeOldMarker();
+        LatLng sydney = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+        marker = mMap.addMarker(new MarkerOptions().position(sydney).title("You are Here"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, (float) (mMap.getMinZoomLevel() /*/ 2.0*/)));
+    }
+
+    private void removeOldMarker() {
         if (marker != null) {
             marker.remove();
         }
-        LatLng sydney = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-        marker = mMap.addMarker(new MarkerOptions().position(sydney).title("You are Here"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, (float) (mMap.getMaxZoomLevel() / 2.0)));
     }
 }
