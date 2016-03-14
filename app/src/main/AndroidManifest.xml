@@ -8,6 +8,7 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
             android:allowBackup="true"
@@ -15,8 +16,9 @@
             android:label="@string/app_name"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".LoginScreenActivity"
-                  android:noHistory="true">
+        <activity
+                android:name=".LoginScreenActivity"
+                android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -38,6 +40,13 @@
         <activity
                 android:name=".RiderActivity"
                 android:label="@string/title_activity_rider">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="com.martinez.salvador.uberclone.LoginScreenActivity"/>
+        </activity>
+        <activity
+                android:name=".DriverActivity"
+                android:label="@string/title_activity_driver">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="com.martinez.salvador.uberclone.LoginScreenActivity"/>

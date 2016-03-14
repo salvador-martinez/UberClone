@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Switch;
+import com.firebase.client.Firebase;
 
 public class LoginScreenActivity extends AppCompatActivity {
 
@@ -17,6 +18,7 @@ public class LoginScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
         mSwitch = (Switch) findViewById(R.id.PassDriver);
+        Firebase.setAndroidContext(this);
     }
 
     @Override
@@ -28,6 +30,8 @@ public class LoginScreenActivity extends AppCompatActivity {
     public void onClick(View v) {
         if (mSwitch.isChecked()) {
             //Driver
+            Intent intent = new Intent(this, DriverActivity.class);
+            startActivity(intent);
         }
         else {
             //Passenger
