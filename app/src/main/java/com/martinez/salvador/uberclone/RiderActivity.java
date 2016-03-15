@@ -110,6 +110,23 @@ public class RiderActivity extends FragmentActivity implements OnMapReadyCallbac
     @Override
     protected void onStart() {
         mGoogleApiClient.connect();
+        root = new Firebase(getString(R.string.dbroot));
+        if (root.getAuth() == null) {
+            root.authAnonymously(new Firebase.AuthResultHandler() {
+                @Override
+                public void onAuthenticated(AuthData authData) {
+                    uid = authData.getUid();
+                }
+
+                @Override
+                public void onAuthenticationError(FirebaseError firebaseError) {
+                    firebaseError.toException().printStackTrace();
+                }
+            });
+        }
+        else {
+            uid = root.getAuth().getUid();
+        }
         super.onStart();
     }
 

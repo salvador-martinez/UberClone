@@ -51,6 +51,8 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="com.martinez.salvador.uberclone.LoginScreenActivity"/>
         </activity>
+        <activity android:name=".SelectRiderActivity">
+        </activity>
     </application>
 
 </manifest>

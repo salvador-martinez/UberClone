@@ -30,7 +30,7 @@ public class LoginScreenActivity extends AppCompatActivity {
     public void onClick(View v) {
         if (mSwitch.isChecked()) {
             //Driver
-            Intent intent = new Intent(this, DriverActivity.class);
+            Intent intent = new Intent(this, SelectRiderActivity.class);
             startActivity(intent);
         }
         else {
